@@ -2,6 +2,7 @@
 require 'net/http'
 require 'json'
 require 'D3/hero'
+require 'ostruct'
 
 # The main D3 class
 class Diablo3
@@ -17,6 +18,15 @@ class Diablo3
   #  heroes = d3.list_heroes  #returns a hash whose key is the hero id and value is the respective Hero class
   #  heroes[1234].name #return the hero's name whose id is 1234
   #  
+  #  You can fetch the global progression information using:
+  #  prog = d3.global_progression
+  #  then you'll have access to
+  #  prog.normal 
+  #  prog.nightmare...inferno
+  #  
+  #  refer to https://github.com/Blizzard/d3-api-docs for more information about the fetched data
+
+  attr_accessor :global_progression
 
   def initialize(server='us', btag)
 
@@ -28,11 +38,14 @@ class Diablo3
     ret = Net::HTTP.get(URI.parse(api_url))
     @data = JSON(ret)
 
+
     if @data.empty?
       raise "D3_cannot_retrieve_info"
     elsif @data['code'].eql?('OOPS')
       raise "D3_possible_invalid_battletag"
     end
+
+    @global_progression = OpenStruct.new(@data['progression'])
 
   end
 

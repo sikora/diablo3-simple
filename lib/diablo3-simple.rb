@@ -3,7 +3,21 @@ require 'net/http'
 require 'json'
 require 'D3/hero'
 
+# The main D3 class
 class Diablo3
+  # Diablo 3 simple class to retrieve info from Blizzard official D3 API
+  #
+  # Usage:
+  #  require 'diablo3-simple'
+  #  d3 = Diablo3.new(<server>, <battletag> )  
+  #  server should be 'us' or 'eu' (it may work with other regions if they use like <server>.battle.net pattern)
+  #  battletag is the user battletag
+  #  
+  #  d3 = Diablo3.new('us', 'sikora#1521' )
+  #  heroes = d3.list_heroes  #returns a hash whose key is the hero id and value is the respective Hero class
+  #  heroes[1234].name #return the hero's name whose id is 1234
+  #  
+
   def initialize(server='us', btag)
 
     @server = server
